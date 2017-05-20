@@ -11,6 +11,7 @@ class DT:
         if ctr.most_common()[0][1] == len(data)/2:
             default = 'yes'
 
+        self.attr_vals = [{r[i] for r in data} for i in range(8)]
         self.tree = self.gen_dt(data, {i for i in range(8)}, default)
 
 
@@ -39,7 +40,7 @@ class DT:
 
         best = self.choose_attr(data, attrs)
         root = [best, {}]
-        for v in ('low','medium','high', 'very high'):
+        for v in self.attr_vals[best]:
 
             # partition data on the nominal value of best attribute
             attr_partition = [r for r in data if r[best] == v]
@@ -53,7 +54,7 @@ class DT:
         gains = []
         for a in attrs:
             attr_ent = 0
-            for v in ('low','medium','high','very high'):
+            for v in self.attr_vals[a]:
                 part = [r for r in data if r[a] == v]
                 attr_ent += len(part)/len(data)*self.get_ent(part)
             gains.append((parent_ent - attr_ent, a))
@@ -73,7 +74,7 @@ class DT:
     def classify(self, row):
         root = self.tree
         attr = None
-        print(json.dumps(root))
+        #print(json.dumps(root))
         while True:
             attr = root[0]
             if attr in ('y', 'n'):
