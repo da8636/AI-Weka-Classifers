@@ -2,7 +2,7 @@ with open('pima.csv') as pima:
     pima_list = []
     for line in pima:
         pima_list.append(line.strip().split(','))
-    print(pima_list)
+
     class_yes = []
     class_no = []
     for line in pima_list:
